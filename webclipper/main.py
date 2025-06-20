@@ -1,5 +1,5 @@
+# src/webclip/main.py
 import requests
-from bs4 import BeautifulSoup
 from readability import Document
 import html2text
 import argparse
@@ -40,16 +40,32 @@ def get_url_content(url, output_format='text', text_options=None):
         # Consolidate excessive newlines for cleaner output
         return re.sub(r'\n{3,}', '\n\n', plain_text).strip()
 
+def process_url(url, output_format, text_options, include_url_option):
+    """
+    Processes a single URL: fetches, converts, and prints the content.
+    """
+    try:
+        print(f"Fetching and converting {url} to {output_format}...", file=sys.stderr)
+        content = get_url_content(url, output_format, text_options)
+        print(content) # to stdout
+        if include_url_option:
+            print(f"\nSource: {url}") # to stdout
+        # Add a separator for clarity when processing multiple URLs
+        print("\n---\n", file=sys.stdout)
+    except Exception as e:
+        print(f"An error occurred while processing {url}: {e}", file=sys.stderr)
+
 def main():
     """
     Main function to parse command-line arguments and run the conversion.
     """
     parser = argparse.ArgumentParser(
-        description="Fetch the main content of a webpage and output as Markdown or plain text.",
+        description="Fetch the main content of a webpage and output as Markdown or plain text. Reads from stdin if no URL is provided.",
         epilog="Example: webclip https://example.com -i"
     )
     # --- Primary Arguments ---
-    parser.add_argument("url", help="The URL of the webpage to process.")
+    # The URL is now optional, denoted by '?'
+    parser.add_argument("url", nargs='?', default=None, help="The URL to process. If omitted, reads URLs from stdin.")
     parser.add_argument("-m", "--markdown", action="store_true", help="Output in Markdown format. Default is rich plain text.")
     parser.add_argument("-i", "--include-url", action="store_true", help="Append the source URL at the end of the output.")
     
@@ -60,11 +76,9 @@ def main():
     text_group.add_argument("--no-emphasis", action="store_true", help="Remove bold/italic markers from plain text output.")
     text_group.add_argument("--no-tables", action="store_true", help="Remove tables from plain text output.")
 
-
     args = parser.parse_args()
     output_format = 'markdown' if args.markdown else 'text'
 
-    # Package the text options into a dictionary to pass to the function
     text_options = {
         'no_links': args.no_links,
         'no_images': args.no_images,
@@ -72,16 +86,19 @@ def main():
         'no_tables': args.no_tables,
     }
 
-    print(f"Fetching and converting {args.url} to {output_format}...", file=sys.stderr)
-
-    try:
-        content = get_url_content(args.url, output_format, text_options)
-        print(content) # to stdout
-        if args.include_url:
-            print(f"\nSource: {args.url}") # to stdout
-    except Exception as e:
-        print(f"An error occurred: {e}", file=sys.stderr)
-        sys.exit(1)
+    if args.url:
+        # If a URL is provided as an argument, process it.
+        process_url(args.url, output_format, text_options, args.include_url)
+    else:
+        # If no URL argument, check for piped input from stdin.
+        if not sys.stdin.isatty():
+            for line in sys.stdin:
+                url = line.strip()
+                if url:
+                    process_url(url, output_format, text_options, args.include_url)
+        else:
+            print("No URL provided and no data from stdin. Use -h for help.", file=sys.stderr)
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
