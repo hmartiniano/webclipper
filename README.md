@@ -1,6 +1,6 @@
-# webclip
+# webclipper
 
-**webclip** is a simple Python tool to fetch the main content of a webpage and convert it into clean, readable Markdown or plain text. It removes clutter like ads, headers, and navigation bars, letting you focus on the article's text.
+**webclipper** is a simple Python tool to fetch the main content of a webpage and convert it into clean, readable Markdown or plain text. It removes clutter like ads, headers, and navigation bars, letting you focus on the article's text.
 
 It can be used as a command-line application for quick conversions in your terminal or as a library in your own Python projects.
 
@@ -12,14 +12,14 @@ It can be used as a command-line application for quick conversions in your termi
 
 ### Installation
 
-To install `webclip`, you can clone the repository and install it using `pip`.
+To install `webclipper`, you can clone the repository and install it using `pip`.
 
 ```
 
 # Clone the repository (if you haven't already)
 
-git clone [https://github.com/your-username/webclip.git](https://www.google.com/search?q=https://github.com/your-username/webclip.git)
-cd webclip
+git clone [https://github.com/your-username/webclipper.git](https://www.google.com/search?q=https://github.com/your-username/webclipper.git)
+cd webclipper
 
 # Install the package in editable mode
 
@@ -29,19 +29,19 @@ pip install -e .
 
 ```
 
-This will install the package and its dependencies, and also make the `webclip` command available in your terminal.
+This will install the package and its dependencies, and also make the `webclipper` command available in your terminal.
 
 ### How to Use
 
 #### As a Command-Line App
 
-Once installed, you can use the `webclip` command directly from your terminal. The output is sent to standard output, so you can easily redirect it to a file.
+Once installed, you can use the `webclipper` command directly from your terminal. The output is sent to standard output, so you can easily redirect it to a file.
 
 **Basic Usage (get plain text):**
 
 ```
 
-webclip "[https://en.wikipedia.org/wiki/Python\_(programming\_language](https://en.wikipedia.org/wiki/Python_\(programming_language\))"
+webclipper "[https://en.wikipedia.org/wiki/Python\_(programming\_language](https://en.wikipedia.org/wiki/Python_\(programming_language\))"
 
 ```
 
@@ -51,7 +51,7 @@ Use the `-m` or `--markdown` flag.
 
 ```
 
-webclip "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" --markdown
+webclipper "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" --markdown
 
 ```
 
@@ -61,7 +61,7 @@ Use the `-i` or `--include-url` flag to append the source URL at the end of the 
 
 ```
 
-webclip "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" -m -i
+webclipper "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" -m -i
 
 ```
 
@@ -71,17 +71,17 @@ You can save the output using standard shell redirection.
 
 ```
 
-webclip "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" \> my\_article.txt
+webclipper "[https://www.some-article-url.com](https://www.google.com/search?q=https://www.some-article-url.com)" \> my\_article.txt
 
 ```
 
 #### As a Library
 
-You can also import `webclip` into your own Python scripts to integrate its functionality. The `get_url_content` function is all you need.
+You can also import `webclipper` into your own Python scripts to integrate its functionality. The `get_url_content` function is all you need.
 
 ```python
 
-from webclip import get\_url\_content
+from webclipper import get\_url\_content
 
 # The URL of the article you want to clip
 
